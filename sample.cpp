@@ -43,7 +43,7 @@ const float VMIN =	{   -100. };
 const float VMAX =	{    100. };
 
 
-const int NUM_PARTICLES = 524288;
+const int NUM_PARTICLES = 131072;
 const int LOCAL_SIZE    = 64;
 const char *CL_FILE_NAME   = { "particles.cl" };
 const char *CL_BINARY_NAME = { "particles.nv" };
@@ -119,7 +119,6 @@ float	TransXYZ[3];		// set by glui translation widgets
 
 double	ElapsedTime;
 double	MaxPerformance;
-float maxPerformance = 0.;
 int		ShowPerformance;
 
 size_t GlobalWorkSize[3] = { NUM_PARTICLES, 1, 1 };
@@ -363,14 +362,14 @@ Display( )
 
 	if( ShowPerformance )
 	{	
-		float currentPerformance = (float)NUM_PARTICLES / ElapsedTime / 1000000000.;
+		float currentPerformance = (float)NUM_PARTICLES / ElapsedTime / 1000000.;
 
-		if (currentPerformance > maxPerformance)
+		if (currentPerformance > MaxPerformance)
 		{
-			maxPerformance = currentPerformance;
+			MaxPerformance = currentPerformance;
 		}
 		char str[128];
-		sprintf( str, "%6.1f GigaParticles/Sec", maxPerformance );
+		sprintf( str, "%6.2f MegaParticles/Sec", MaxPerformance );
 		glDisable( GL_DEPTH_TEST );
 		glMatrixMode( GL_PROJECTION );
 		glLoadIdentity();
