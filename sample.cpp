@@ -309,13 +309,13 @@ Display( )
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity( );
 	if( WhichProjection == ORTHO )
-		glOrtho( -300., 300.,  -300., 300., 0.1, 2000. );
+		glOrtho( -300., 300.,  -300., 300., 0.1, 3000. );
 	else
 		gluPerspective( 50., INIT_WINDOW_ASPECT,	0.1, 4000. );
 
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity( );
-	gluLookAt( -500., 1000., 2000.,     0., 0., 0.,     0. , 1., 0. );
+	gluLookAt( -1900., 1000., 1900.,     0., 0., 0.,     0. , 1., 0. );
 	glTranslatef( (GLfloat)TransXYZ[0], (GLfloat)TransXYZ[1], -(GLfloat)TransXYZ[2] );
 	glRotatef( (GLfloat)Yrot, 0., 1., 0. );
 	glRotatef( (GLfloat)Xrot, 1., 0., 0. );
@@ -713,7 +713,16 @@ InitLists( )
 			glTranslatef(400.f, 500.f, 500.f);
 			glutWireCube(500.f);
 		glPopMatrix();
+
+
+		glColor3f(.55f, .4f, .85f);
+		glPushMatrix();
+			glTranslatef(-1000.f, -750.f, -750.f);
+			glutWireCube(600.f);
+		glPopMatrix();
 	glEndList();
+
+
 
 
 
