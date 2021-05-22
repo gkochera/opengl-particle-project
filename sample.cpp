@@ -54,8 +54,12 @@ const int GLUIFALSE = { false };
 
 #define ESCAPE		0x1b
 
+
+// Modified to give us a 1280 by 720 window. Allowing for a 720p viewport.
 const int INIT_WINDOW_SIZE_X = { 1280 };		// window size in pixels
 const int INIT_WINDOW_SIZE_Y = { 720 };
+
+// Added to create aspect required for creating the viewport.
 const float INIT_WINDOW_ASPECT = (float)INIT_WINDOW_SIZE_X / (float)INIT_WINDOW_SIZE_Y;
 
 const float ANGFACT = { 1. };
@@ -111,14 +115,14 @@ int	Paused;
 GLfloat	RotMatrix[4][4];	// set by glui rotation widget
 float	Scale, Scale2;		// scaling factors
 GLuint	SphereList;
-GLuint	CubeList;
+GLuint	CubeList;			// GEORGE - Added for the two cubes.
 int	WhichProjection;	// ORTHO or PERSP
 int	Xmouse, Ymouse;		// mouse values
 float	Xrot, Yrot;		// rotation angles in degrees
 float	TransXYZ[3];		// set by glui translation widgets
 
 double	ElapsedTime;
-double	MaxPerformance;
+double	MaxPerformance;		// GEORGE - Added to show max performance in the GUI during a run.
 int		ShowPerformance;
 
 size_t GlobalWorkSize[3] = { NUM_PARTICLES, 1, 1 };
@@ -312,10 +316,14 @@ Display( )
 	if( WhichProjection == ORTHO )
 		glOrtho( -300., 300.,  -300., 300., 0.1, 3000. );
 	else
+		// GEORGE Changed aspect to be based on given height and width of window and changed far
+		// draw distance barrier to 4000.
 		gluPerspective( 50., INIT_WINDOW_ASPECT,	0.1, 4000. );
 
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity( );
+
+	// Changed the starting point of the camera so I didn't have to move it every run.
 	gluLookAt( -1900., 1000., 1900.,     0., 0., 0.,     0. , 1., 0. );
 	glTranslatef( (GLfloat)TransXYZ[0], (GLfloat)TransXYZ[1], -(GLfloat)TransXYZ[2] );
 	glRotatef( (GLfloat)Yrot, 0., 1., 0. );
@@ -362,8 +370,10 @@ Display( )
 
 	if( ShowPerformance )
 	{	
+		// Modified to show MegaParticles/Second
 		float currentPerformance = (float)NUM_PARTICLES / ElapsedTime / 1000000.;
-
+		
+		// Calculate maximum performance and render it instead of currentPerformance.
 		if (currentPerformance > MaxPerformance)
 		{
 			MaxPerformance = currentPerformance;
@@ -378,9 +388,6 @@ Display( )
 		glLoadIdentity();
 		glColor3f( 1., 1., 1. );
 		DoRasterString( 5., 95., 0., str );
-		glLoadIdentity();
-		glColor3f(1., 1., 1.);
-		DoRasterString(100., 200., 0., str);
 	}
 
 	glutSwapBuffers( );
@@ -713,7 +720,10 @@ InitLists( )
 	glEndList( );
 
 	// ********************************************
-	// Cool custom cube, let's see if we can make this work...
+	// Cool custom cube, we made two...
+	// Cube 1 is at 400, 500, 500 with an edge length of 500.
+	// Cube 2 is at -1000, -750, -750 with an edge length of 600. 
+	//
 	// Will match in CL
 	// ********************************************
 	CubeList = glGenLists( 1 );
